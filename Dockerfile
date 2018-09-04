@@ -108,13 +108,17 @@ ENV PATH="/opt/NextClip/1.3.1/bin:/opt/NextClip/1.3.1/scripts:$PATH"
 RUN conda install -c bioconda abyss
 
 # --- Installing FastQC ---
-RUN conda install -c bioconda fastqc 
-RUN which fastqc && fastqc --version
+RUN conda install -c bioconda fastqc
+#RUN which fastqc && fastqc --version
 
 # --- Installing BUSCO ---
 RUN conda install -c bioconda busco
-RUN which BUSCO.py && BUSCO.py --version
+#RUN which busco && busco --version
+#RUN conda list
 
 # --- Installing QUAST ---
 RUN conda install -c bioconda quast
-RUN which quast && quast --version
+#RUN conda install -c bioconda quast_libs
+#RUN quast-download-manta
+#RUN quast-download-blastdb
+#RUN which quast && quast --version
