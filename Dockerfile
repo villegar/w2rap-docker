@@ -49,16 +49,17 @@ RUN echo "/usr/local/lib64" > usrLocalLib64.conf && \
 RUN rm -rf /opt/gcc-${GCC_VER} && rm -rf ~/tests && rm -rf *.tar.gz
 
 # --- Installing Anaconda ---
-RUN echo 'export PATH=/opt/conda3/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O /opt/anaconda.sh && \
-    /bin/bash /opt/anaconda.sh -b -p /opt/conda3 && \
-    rm /opt/anaconda.sh
+#RUN echo 'export PATH=/opt/conda3/bin:$PATH' > /etc/profile.d/conda.sh && \
+#    wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O /opt/anaconda.sh && \
+#    /bin/bash /opt/anaconda.sh -b -p /opt/conda3 && \
+#    rm /opt/anaconda.sh
 
 # --- Installing Miniconda ---
-#RUN echo 'export PATH=/opt/conda3/bin:$PATH' > /etc/profile.d/conda.sh && \
-#    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /opt/miniconda.sh && \
-#    /bin/bash /opt/miniconda.sh -b -p /opt/conda3 && \
-#    rm /opt/miniconda.sh
+RUN echo 'export PATH=/opt/conda3/bin:$PATH' > /etc/profile.d/conda.sh && \
+    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /opt/miniconda.sh && \
+    /bin/bash /opt/miniconda.sh -b -p /opt/conda3 && \
+    rm /opt/miniconda.sh
+
 ENV PATH="/opt/conda3/bin:${PATH}"
 RUN conda install numpy scipy matplotlib sphinx
 RUN conda config --add channels r && \
@@ -79,6 +80,7 @@ RUN git clone https://github.com/gonzalogacc/w2rap-contigger.git && \
     make -j 16
 ENV PATH="/opt/w2rap-contigger/bin:${PATH}"
 RUN which w2rap-contigger && w2rap-contigger --version
+RUN rm -rf /opt/w2rap-contigger/CMakeFiles*
 
 # --- Installing BWA (Burrows-Wheeler Aligner) ---
 RUN conda install -c bioconda bwa
@@ -113,12 +115,11 @@ RUN conda install -c bioconda fastqc
 
 # --- Installing BUSCO ---
 RUN conda install -c bioconda busco
+RUN PATH_BUSCO=$(which run_busco) && \
+    ln -sf $(which run_busco) $(dirname ${PATH_BUSCO})/busco && \
+    ln -sf $(which run_busco) $(dirname ${PATH_BUSCO})/BUSCO.py
 #RUN which busco && busco --version
-#RUN conda list
 
 # --- Installing QUAST ---
 RUN conda install -c bioconda quast
-#RUN conda install -c bioconda quast_libs
-#RUN quast-download-manta
-#RUN quast-download-blastdb
 #RUN which quast && quast --version
