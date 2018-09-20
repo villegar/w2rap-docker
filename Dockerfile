@@ -121,5 +121,5 @@ RUN PATH_BUSCO=$(which run_busco) && \
 #RUN which busco && busco --version
 
 # --- Installing QUAST ---
-RUN conda install -c bioconda quast
+#RUN conda install -c bioconda quast
 #RUN which quast && quast --version
